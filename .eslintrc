@@ -115,7 +115,7 @@
     "object-shorthand": ["error", "always"],
     "object-curly-spacing": ["error", "always"],
     "computed-property-spacing": ["error", "never"],
-    "max-len": ["error", 80],
+    "max-len": ["error", 100],
     "no-unneeded-ternary": "error",
     "constructor-super": "error",
     "yield-star-spacing": ["error", "after"],
