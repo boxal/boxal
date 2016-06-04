@@ -1,6 +1,6 @@
 import React from 'react';
 
-function FormGroup({ children, ...props}) {
+function FormGroup({ children, ...props }) {
   return (
     <div className="py2" {...props}>
       { children }

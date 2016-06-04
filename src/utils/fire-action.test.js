@@ -8,12 +8,12 @@ describe('fireAction', () => {
 
   const mockReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-    case 'test':
-      state.test = true;
-      return state;
+      case 'test':
+        state.test = true;
+        return state;
 
-    default:
-      return state;
+      default:
+        return state;
     }
   };
 
