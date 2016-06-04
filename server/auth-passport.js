@@ -7,10 +7,10 @@ module.exports = {
 
   readUsers: () => {
     return readFile('./server/users.json')
-    .then(userFileData => {
+    .then((userFileData) => {
       return JSON.parse(userFileData);
     })
-    .catch(err => {
+    .catch((err) => {
       winston.error(err);
       throw err;
     });

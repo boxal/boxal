@@ -13,9 +13,9 @@ module.exports = (app) => {
   }
 
   const proxy = httpProxy.createProxyServer()
-    .on('error', e => winston.error(e));
+    .on('error', (e) => winston.error(e));
 
-  paths.forEach(path => {
+  paths.forEach((path) => {
     const config = proxyConfig[path];
     if (path && config) {
       winston.info(`Enabling proxy ${path} => `, config);

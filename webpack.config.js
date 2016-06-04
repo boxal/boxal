@@ -87,7 +87,7 @@ module.exports = {
   },
 
   devtool: 'source-map',
-  plugins: plugins,
+  plugins,
 
   devServer: {
     historyApiFallback: { index: '/' },
