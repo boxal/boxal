@@ -1,35 +1,33 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { fromJS } from 'immutable';
 import persistState from 'redux-localstorage';
-import thunk from 'redux-thunk';
-import promiseMiddleware from '../middleware/promise-middleware';
 import { browserHistory } from 'react-router';
 import { routerMiddleware } from 'react-router-redux';
+import createSagaMiddleware from 'redux-saga';
 import logger from './logger';
 import rootReducer from '../reducers';
 
 function configureStore(initialState) {
+  const sagaMiddleware = createSagaMiddleware();
   const store = compose(
-    _getMiddleware(),
+    applyMiddleware(..._getMiddleware(), sagaMiddleware),
     ..._getEnhancers()
   )(createStore)(rootReducer, initialState);
 
   _enableHotLoader(store);
-  return store;
+  return { ...store, runSaga: sagaMiddleware.run };
 }
 
 function _getMiddleware() {
   let middleware = [
     routerMiddleware(browserHistory),
-    promiseMiddleware,
-    thunk,
   ];
 
   if (__DEV__) {
     middleware = [...middleware, logger];
   }
 
-  return applyMiddleware(...middleware);
+  return middleware;
 }
 
 function _getEnhancers() {
@@ -55,7 +53,7 @@ function _enableHotLoader(store) {
 
 function _getStorageConfig() {
   return {
-    key: 'react-redux-seed',
+    key: 'boxal',
     serialize: (store) => {
       return store && store.session ?
         JSON.stringify(store.session.toJS()) : store;
