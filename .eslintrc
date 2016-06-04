@@ -104,11 +104,22 @@
 /**
  * Style
  */
-    "indent": [2, 2],                // http://eslint.org/docs/rules/indent
+    "indent": ["error", 2, {
+      "SwitchCase": 1                // http://eslint.org/docs/rules/indent
+    }],
     "brace-style": [2,               // http://eslint.org/docs/rules/brace-style
       "1tbs", {
       "allowSingleLine": true
     }],
+    "arrow-parens": ["error", "always"],
+    "object-shorthand": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
+    "computed-property-spacing": ["error", "never"],
+    "max-len": ["error", 80],
+    "no-unneeded-ternary": "error",
+    "constructor-super": "error",
+    "yield-star-spacing": ["error", "after"],
+    "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
     "quotes": [
       2, "single", "avoid-escape"    // http://eslint.org/docs/rules/quotes
     ],
