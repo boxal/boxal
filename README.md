@@ -1,5 +1,6 @@
 # Boxal
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Stories in Ready](https://badge.waffle.io/boxal/boxal.png?label=ready&title=Ready)](https://waffle.io/boxal/boxal)
 ## npm scripts
 

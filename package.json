@@ -10,6 +10,7 @@
     "prebuild": "npm run clean",
     "build": "cross-env NODE_ENV=production webpack -p",
     "clean": "rimraf dist/ coverage/",
+    "commit": "git cz",
     "cover": "nyc check-coverage --lines 80 --functions 80 --branches 80",
     "dev:server": "cross-env NODE_ENV=development PORT=3000 nodemon --use_strict server/node-server.js",
     "dev:client": "cross-env NODE_ENV=development webpack-dev-server -d --inline --hot --progress --no-info",
@@ -67,10 +68,12 @@
     "body-parser": "^1.15.1",
     "chai": "^3.4.0",
     "classnames": "^2.2.3",
+    "commitizen": "^2.8.2",
     "concurrently": "^2.0.0",
     "cross-env": "^1.0.7",
     "css-loader": "^0.23.0",
     "cssnano": "^3.5.2",
+    "cz-conventional-changelog": "^1.1.6",
     "denodeify": "^1.2.1",
     "enzyme": "^2.2.0",
     "eslint": "2.10.2",
@@ -130,5 +133,10 @@
   },
   "bugs": {
     "url": "https://github.com/boxal/boxal/issues"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
