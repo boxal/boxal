@@ -6,10 +6,14 @@ import Container from '../components/container';
 function LoginPage() {
   return (
     <Container size={4} center>
-      <h2 className="caps">Login</h2>
-      <p>
-        Login via Facebook
-      </p>
+      <h2 className="caps">Login to Boxal</h2>
+      <div
+        className="fb-login-button"
+        data-max-rows="1"
+        data-size="xlarge"
+        data-show-faces="false"
+        data-auto-logout-link="false"
+        onLogin={() => checkLoginState()}></div>
     </Container>
   );
 }
@@ -25,4 +29,10 @@ function mapStateToProps() {
 
 function mapDispatchToProps() {
   return {};
+}
+
+function checkLoginState() {
+  FB.getLoginStatus((response) => {
+    statusChangeCallback(response);
+  });
 }

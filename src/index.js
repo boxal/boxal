@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore } from 'react-router-redux';
 
-import routes from './store/routes';
+import getRoutes from './store/routes';
 import configureStore from './store/configure-store';
 import rootSaga from './sagas';
 
@@ -22,7 +22,7 @@ ReactDOM.render(
   <div>
     <Provider store={ store }>
       <Router history={ history }>
-        { routes }
+        { getRoutes(store) }
       </Router>
     </Provider>
   </div>,
