@@ -1,43 +1,40 @@
 import React from 'react';
-import { IndexRedirect, Route } from 'react-router';
+import { browserHistory, Router, IndexRoute, Route } from 'react-router';
+import { push } from 'react-router-redux';
 import App from '../containers/app';
 import AboutPage from '../containers/about-page';
-import LoginPage from '../containers/login-page';
+import * as AC from '../action-creators';
 
 export default (store) => (
-  <Route onEnter={checkAuth(store)} path="/" component={ App }>
-    <IndexRedirect to="/about"/>
-    <Route path="login" component={ LoginPage }/>
-    <Route path="about" component={ AboutPage }/>
-  </Route>
+  <Router history={browserHistory}>
+    <Route path="/" component={ App }>
+      <IndexRoute to="/about"/>
+      <Route path="about" component={ AboutPage }/>
+      <Route path="auth/facebook" onEnter={() => checkAuth(store)}/>
+    </Route>
+  </Router>
 );
 
-
 function checkAuth(store) {
-  return () => {
-    return FB.getLoginStatus((response) => statusChangeCallback(store, response));
-  };
-}
+  const currentState = store.getState();
+  const { routing: {
+    locationBeforeTransitions: {
+      query: {
+        access_token: accessToken,
+        display_name: displayName,
+      },
+    },
+  } } = currentState;
 
-function testAPI() {
-  console.log('Oh HEY Welcome!  Fetching your information.... ');
-  FB.api('/me', (response) => {
-    console.log('Successful login for: ' + response.name);
-  });
-}
-
-function statusChangeCallback(store, response) {
-  console.log(response);
-  if (response.status === 'connected') {
-    // Logged into your app and Facebook.
-    console.log('Person is logged into FB & Boxal!');
-    testAPI();
-  } else if (response.status === 'not_authorized') {
-    // The person is logged into Facebook, but not your app.
-    console.log('Person is logged into FB but not Boxal!');
-  } else {
-    // The person is not logged into Facebook, so we're not sure if
-    // they are logged into this app or not.
-    console.log('Person is not logged into FB!');
+  if (accessToken && displayName) {
+    console.log(displayName);
+    const names = displayName.split(' ');
+    const user = {
+      firstName: names[0],
+      lastName: names[1],
+    };
+    console.log(user);
+    store.dispatch(AC.userAuthenticated(user, accessToken));
   }
+  return store.dispatch(push('/'));
 }
