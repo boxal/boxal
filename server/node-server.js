@@ -3,11 +3,11 @@ const winston = require('winston');
 const helmet = require('helmet');
 const nodeProxy = require('./node-proxy');
 const nodeAppServer = require('./node-app-server');
-const authPassport = require('./auth-passport');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-let users;
+const FacebookStrategy = require('passport-facebook').Strategy;
+
+const secrets = require('./constants/index.js');
 
 
 /**
@@ -19,14 +19,6 @@ let users;
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-authPassport.readUsers()
-  .then( (_users) => {
-    users = _users;
-  })
-  .catch( (err) => {
-    throw err;
-  });
-
 // Enable various security helpers.
 app.use(helmet());
 
@@ -34,33 +26,34 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use(passport.initialize());
-app.use(passport.session());
 
-passport.use(new LocalStrategy(
-  (username, password, done) => {
-    authPassport.authenticateUser(username, password, users)
-    .then( (authResult) => {
-      return done(null, authResult);
-    })
-    .then(null, (message) => {
-      return done(null, false, message);
-    });
+passport.use(new FacebookStrategy({
+  clientID: secrets.FACEBOOK_CLIENT_ID,
+  clientSecret: secrets.FACEBOOK_CLIENT_SECRET,
+  callbackURL: secrets.FACEBOOK_CALLBACK_URL,
+},
+  (accessToken, refreshToken, profile, done) => {
+    return done(null, Object.assign(profile, { token: accessToken }));
   }
-
 ));
 
-passport.serializeUser( (user, done) => {
-  done(null, user.meta.id);
-});
+// Redirect the user to Facebook for authentication.  When complete,
+// Facebook will redirect the user back to the application at
+//     /auth/facebook/callback
+app.get('/auth/facebook', passport.authenticate('facebook'));
 
-passport.deserializeUser( (id, done) => {
-  done(null, authPassport.getUserById(id, users));
-});
-
-app.post('/api/auth/login',
-  passport.authenticate('local'),
-  (req, res) => {
-    res.status(200).send(JSON.stringify(req.user));
+// Facebook will redirect the user to this URL after approval.  Finish the
+// authentication process by attempting to obtain an access token.  If
+// access was granted, the user will be logged in.  Otherwise,
+// authentication has failed.
+app.get('/auth/facebook/callback',
+  passport.authenticate('facebook', {
+    failureRedirect: '/login',
+    session: false,
+  }),
+  (request, response) => {
+    response.redirect('/auth/facebook?access_token=' + request.user.token
+     + '&display_name=' + request.user.displayName);
   }
 );
 
