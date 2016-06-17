@@ -27,13 +27,11 @@ function checkAuth(store) {
   } } = currentState;
 
   if (accessToken && displayName) {
-    console.log(displayName);
     const names = displayName.split(' ');
     const user = {
       firstName: names[0],
       lastName: names[1],
     };
-    console.log(user);
     store.dispatch(AC.userAuthenticated(user, accessToken));
   }
   return store.dispatch(push('/'));
