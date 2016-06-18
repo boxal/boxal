@@ -1,14 +1,13 @@
-const express = require('express');
-const winston = require('winston');
-const helmet = require('helmet');
-const nodeProxy = require('./node-proxy');
-const nodeAppServer = require('./node-app-server');
-const bodyParser = require('body-parser');
-const passport = require('passport');
-const FacebookStrategy = require('passport-facebook').Strategy;
+import express from 'express';
+import winston from 'winston';
+import helmet from 'helmet';
+import nodeProxy from './node-proxy';
+import nodeAppServer from './node-app-server';
+import bodyParser from 'body-parser';
+import passport from 'passport';
+import { Strategy as FacebookStrategy } from 'passport-facebook';
 
-const secrets = require('./constants/index.js');
-
+import * as SECRETS from './constants/secrets.js';
 
 /**
  * Heroku-friendly production http server.
@@ -28,9 +27,9 @@ app.use(bodyParser.json());
 app.use(passport.initialize());
 
 passport.use(new FacebookStrategy({
-  clientID: secrets.FACEBOOK_CLIENT_ID,
-  clientSecret: secrets.FACEBOOK_CLIENT_SECRET,
-  callbackURL: secrets.FACEBOOK_CALLBACK_URL,
+  clientID: SECRETS.FACEBOOK.CLIENT_ID,
+  clientSecret: SECRETS.FACEBOOK.CLIENT_SECRET,
+  callbackURL: SECRETS.FACEBOOK.CALLBACK_URL,
 },
   (accessToken, refreshToken, profile, done) => {
     return done(null, Object.assign(profile, { token: accessToken }));
@@ -65,11 +64,16 @@ nodeProxy(app);
 nodeAppServer(app);
 
 // Start up the server.
-app.listen(PORT, (err) => {
-  if (err) {
-    winston.error(err);
-    return;
-  }
 
-  winston.info(`Listening on port ${PORT}`);
-});
+export { app as app };
+
+export function startServer() {
+  app.listen(PORT, (err) => {
+    if (err) {
+      winston.error(err);
+      return;
+    }
+
+    winston.info(`Listening on port ${PORT}`);
+  });
+}
