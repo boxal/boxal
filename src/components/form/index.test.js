@@ -19,7 +19,7 @@ describe('Form', () => {
   it('should respond to submit events', () => {
     const onSubmit = sinon.spy();
     const wrapper = shallow(
-      <Form handleSubmit={onSubmit} />
+      <Form handleSubmit={onSubmit}/>
     );
     const eventStub = { preventDefault: () => {} };
     wrapper.find('form').simulate('submit', eventStub);
@@ -30,7 +30,7 @@ describe('Form', () => {
     const onBlur = sinon.spy();
     global.document = { activeElement: { blur: onBlur } };
     const wrapper = shallow(
-      <Form handleSubmit={() => {}} />
+      <Form handleSubmit={() => {}}/>
     );
     const eventStub = { preventDefault: () => {} };
     wrapper.find('form').simulate('submit', eventStub);

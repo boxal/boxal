@@ -10,7 +10,7 @@ function Form({ children, handleSubmit }) {
         }
         handleSubmit();
       }}>
-      { children }
+      {children}
     </form>
   );
 }

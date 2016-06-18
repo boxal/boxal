@@ -6,7 +6,7 @@ import Counter from './index';
 
 describe('counter', () => {
   it('should create a counter', () => {
-    const wrapper = render(<Counter counter={5} />);
+    const wrapper = render(<Counter counter={5}/>);
 
     assert.isOk(wrapper.children().length,
       'Counter not found');
@@ -18,7 +18,7 @@ describe('counter', () => {
     const onIncrement = sinon.spy();
     const onDecrement = sinon.spy();
     const wrapper = shallow(
-      <Counter increment={onIncrement} decrement={onDecrement} />
+      <Counter increment={onIncrement} decrement={onDecrement}/>
     );
 
     wrapper.find('[data-ref="incrementButton"]').simulate('click');

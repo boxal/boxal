@@ -9,12 +9,6 @@ import { Strategy as FacebookStrategy } from 'passport-facebook';
 
 import * as SECRETS from './constants/secrets.js';
 
-/**
- * Heroku-friendly production http server.
- *
- * Serves your app and allows you to proxy APIs if needed.
- */
-
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -51,8 +45,10 @@ app.get('/auth/facebook/callback',
     session: false,
   }),
   (request, response) => {
-    response.redirect('/auth/facebook?access_token=' + request.user.token
-     + '&display_name=' + request.user.displayName);
+    const { token, displayName } = request.user;
+    response.redirect(
+      `/login/facebook?access_token=${token}&display_name=${displayName}`
+   );
   }
 );
 

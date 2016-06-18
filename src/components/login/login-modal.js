@@ -5,14 +5,14 @@ import LoginForm from './login-form';
 
 function LoginModal({ isVisible, isPending, hasError, onSubmit }) {
   return (
-    <Modal isVisible={ isVisible }>
+    <Modal isVisible={isVisible}>
       <ModalContent>
         <h1 className="mt0">Login</h1>
 
         <LoginForm
-          isPending={ isPending }
-          hasError={ hasError }
-          onSubmit={ onSubmit } />
+          isPending={isPending}
+          hasError={hasError}
+          onSubmit={onSubmit}/>
       </ModalContent>
     </Modal>
   );

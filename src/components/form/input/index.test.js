@@ -11,7 +11,7 @@ describe('Input', () => {
     };
     const wrapper = render(
       <div id="root">
-        <Input { ...props } />
+        <Input { ...props }/>
       </div>
     );
     assert.isOk(wrapper.children().length, 'Unable to render component');
@@ -43,7 +43,7 @@ describe('Input', () => {
   it('should create a password field', () => {
     const wrapper = render(
       <div id="root">
-        <Input type="password" />
+        <Input type="password"/>
       </div>
     );
     const inputElement = wrapper.find('input');

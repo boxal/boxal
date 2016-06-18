@@ -7,10 +7,10 @@ import * as AC from '../action-creators';
 
 export default (store) => (
   <Router history={browserHistory}>
-    <Route path="/" component={ App }>
+    <Route path="/" component={App}>
       <IndexRoute to="/about"/>
-      <Route path="about" component={ AboutPage }/>
-      <Route path="auth/facebook" onEnter={() => checkAuth(store)}/>
+      <Route path="about" component={AboutPage}/>
+      <Route path="login/facebook" onEnter={() => checkAuth(store)}/>
     </Route>
   </Router>
 );

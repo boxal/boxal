@@ -3,7 +3,7 @@ import React from 'react';
 function Content({ children, isVisible }) {
   return (
     <main>
-      { isVisible ? children : null }
+      {isVisible ? children : null}
     </main>
   );
 }

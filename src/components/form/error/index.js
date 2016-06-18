@@ -5,8 +5,8 @@ function FormError({ children, isVisible, ...props }) {
   const formErrorClasses = classNames('bold', 'black', { 'hide': !isVisible });
 
   return (
-    <div className={ formErrorClasses } {...props}>
-      { children }
+    <div className={formErrorClasses} {...props}>
+      {children}
     </div>
   );
 }

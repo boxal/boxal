@@ -22,9 +22,9 @@ function Alert({
 
   return (
     <div
-      className={ alertClasses }
+      className={alertClasses}
       { ...props }>
-      { children }
+      {children}
     </div>
   );
 }

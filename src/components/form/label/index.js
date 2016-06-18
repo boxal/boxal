@@ -3,7 +3,7 @@ import React from 'react';
 function FormLabel({ children }) {
   return (
     <label>
-      { children }
+      {children}
     </label>
   );
 }

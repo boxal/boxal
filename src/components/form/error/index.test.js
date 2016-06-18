@@ -17,21 +17,21 @@ describe('Error', () => {
 
   it('should allow for custom attributes', () => {
     const wrapper = shallow(
-      <Error data-foo="bar" />
+      <Error data-foo="bar"/>
     );
     assert.isOk(wrapper.find('[data-foo="bar"]').length, 'custom property not found');
   });
 
   it('should be hidden by default', () => {
     const wrapper = shallow(
-      <Error />
+      <Error/>
     );
     assert.isOk(wrapper.find('.hide').length, 'is not hidden');
   });
 
   it('should be hidden if isVisible is false', () => {
     const wrapper = shallow(
-      <Error isVisible={false} />
+      <Error isVisible={false}/>
     );
     assert.isOk(wrapper.find('.hide').length, 'is not hidden');
   });

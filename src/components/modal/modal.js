@@ -7,9 +7,9 @@ function Modal({ isVisible, children }) {
   };
 
   return (
-    <div style={ styles }
+    <div style={styles}
       className="fixed top-0 bottom-0 left-0 right-0 z1 bg-darken-3">
-      { children }
+      {children}
     </div>
   );
 }

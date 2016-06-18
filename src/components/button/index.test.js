@@ -46,7 +46,7 @@ describe('button', () => {
   it('should respond to click events', () => {
     const onButtonClick = sinon.spy();
     const wrapper = shallow(
-      <Button onClick={onButtonClick} />
+      <Button onClick={onButtonClick}/>
     );
     wrapper.simulate('click');
     assert.isTrue(onButtonClick.calledOnce);

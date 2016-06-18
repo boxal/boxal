@@ -6,8 +6,8 @@ function ModalContent({ children }) {
   const classDef = classNames('p2', 'z2', 'bg-white', 'relative', modal);
 
   return (
-    <div className={ classDef }>
-      { children }
+    <div className={classDef}>
+      {children}
     </div>
   );
 }

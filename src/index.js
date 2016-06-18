@@ -20,9 +20,9 @@ store.runSaga(rootSaga);
 
 ReactDOM.render(
   <div>
-    <Provider store={ store }>
-      <Router history={ history }>
-        { getRoutes(store) }
+    <Provider store={store}>
+      <Router history={history}>
+        {getRoutes(store)}
       </Router>
     </Provider>
   </div>,

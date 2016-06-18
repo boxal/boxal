@@ -1,16 +1,42 @@
 {
   "parser": "babel-eslint",          // https://github.com/babel/babel-eslint
   "plugins": [
-    "react"                          // https://github.com/yannickcr/eslint-plugin-react
+    "react",                          // https://github.com/yannickcr/eslint-plugin-react
+    "immutable"
   ],
   "env": {                           // http://eslint.org/docs/user-guide/configuring.html#specifying-environments
     "browser": true,                 // browser global variables
-    "node": true                     // Node.js global variables and Node.js-specific rules
+    "node": true,                     // Node.js global variables and Node.js-specific rules
+    "es6": true
   },
   "parserOptions": {
     "ecmaVersion": 6
   },
+  "globals": {
+    "__DEV__": true,
+    "describe": true,
+    "it": true,
+    "expect": true,
+    "beforeEach": true,
+    "before": true,
+    "afterEach": true,
+    "after": true,
+    "context": true,
+    "sinon": true,
+    "xdescribe": true
+  },
   "rules": {
+    "immutable/no-let": 2,
+    "immutable/no-this": 2,
+    "no-undef": 2,
+    "no-useless-constructor": "error",
+    "arrow-spacing": "error",
+    "object-curly-spacing": ["error", "always"],
+    "computed-property-spacing": ["error", "never"],
+    "no-unneeded-ternary": "error",
+    "constructor-super": "error",
+    "yield-star-spacing": ["error", "after"],
+    "no-confusing-arrow": ["error"],
 /**
  * Strict mode
  */
@@ -113,12 +139,7 @@
     }],
     "arrow-parens": ["error", "always"],
     "object-shorthand": ["error", "always"],
-    "object-curly-spacing": ["error", "always"],
-    "computed-property-spacing": ["error", "never"],
     "max-len": ["error", 100],
-    "no-unneeded-ternary": "error",
-    "constructor-super": "error",
-    "yield-star-spacing": ["error", "after"],
     "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
     "quotes": [
       2, "single", "avoid-escape"    // http://eslint.org/docs/rules/quotes
@@ -166,6 +187,12 @@
 /**
  * JSX style
  */
+    "react/jsx-curly-spacing": ["error", "never"],
+    "react/jsx-key": ["error"],
+    "react/jsx-indent": ["error", 2],
+    "react/jsx-indent-props": ["error", 2],
+    "react/jsx-pascal-case": ["error"],
+    "react/jsx-space-before-closing": ["error", "never"],
     "react/display-name": 0,         // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/display-name.md
     "react/jsx-boolean-value": 2,    // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md
     "jsx-quotes": [2, "prefer-double"], // https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-quotes.md

@@ -34,19 +34,19 @@ function LoginForm({
   },
 }) {
   return (
-    <Form handleSubmit={ handleSubmit }>
-      <Alert isVisible={ isPending }>Loading...</Alert>
-      <Alert id="qa-alert" isVisible={ hasError } status="error">
+    <Form handleSubmit={handleSubmit}>
+      <Alert isVisible={isPending}>Loading...</Alert>
+      <Alert id="qa-alert" isVisible={hasError} status="error">
         Invalid username and password
       </Alert>
 
       <FormGroup>
         <FormLabel id="qa-uname-label">Username</FormLabel>
-        <Input type="text" fieldDefinition={ username } id="qa-uname-input"/>
+        <Input type="text" fieldDefinition={username} id="qa-uname-input"/>
         <FormError
           id="qa-uname-validation"
-          isVisible={ !!(username.touched && username.error) }>
-          { username.error }
+          isVisible={!!(username.touched && username.error)}>
+          {username.error}
         </FormError>
       </FormGroup>
 
@@ -54,12 +54,12 @@ function LoginForm({
         <FormLabel id="qa-password-label">Password</FormLabel>
         <Input
           type="password"
-          fieldDefinition={ password }
-          id="qa-password-input" />
+          fieldDefinition={password}
+          id="qa-password-input"/>
         <FormError
           id="qa-password-validation"
-          isVisible={ !!(password.touched && password.error) }>
-          { password.error }
+          isVisible={!!(password.touched && password.error)}>
+          {password.error}
         </FormError>
       </FormGroup>
 
@@ -68,7 +68,7 @@ function LoginForm({
           Login
         </Button>
         <Button
-          onClick={ resetForm }
+          onClick={resetForm}
           type="reset"
           className="bg-red"
           id="qa-clear-button">

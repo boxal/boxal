@@ -16,7 +16,7 @@ describe('Group', () => {
 
   it('should allow for custom attributes', () => {
     const wrapper = shallow(
-      <Group data-foo="bar" />
+      <Group data-foo="bar"/>
     );
     assert.isOk(wrapper.find('[data-foo="bar"]').length, 'custom property not found');
   });

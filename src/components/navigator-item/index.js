@@ -14,8 +14,8 @@ function NavigatorItem({
   });
 
   return (
-    <div className={ navItemClasses }>
-      { children }
+    <div className={navItemClasses}>
+      {children}
     </div>
   );
 }

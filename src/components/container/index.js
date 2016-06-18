@@ -11,8 +11,8 @@ function Container({ children, size = 1, center }) {
   });
 
   return (
-    <div className={ containerClasses }>
-      { children }
+    <div className={containerClasses}>
+      {children}
     </div>
   );
 }

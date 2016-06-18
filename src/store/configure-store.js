@@ -19,24 +19,24 @@ function configureStore(initialState) {
 }
 
 function _getMiddleware() {
-  let middleware = [
+  const middleware = [
     routerMiddleware(browserHistory),
   ];
 
   if (__DEV__) {
-    middleware = [...middleware, logger];
+    return [...middleware, logger];
   }
 
   return middleware;
 }
 
 function _getEnhancers() {
-  let enhancers = [
+  const enhancers = [
     persistState('session', _getStorageConfig()),
   ];
 
   if (__DEV__ && window.devToolsExtension) {
-    enhancers = [...enhancers, window.devToolsExtension() ];
+    return [...enhancers, window.devToolsExtension() ];
   }
 
   return enhancers;

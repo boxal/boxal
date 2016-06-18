@@ -12,17 +12,17 @@ function Button({
 
   return (
     <button
-      type={ type }
-      className={ buttonClasses }
-      onClick={ onClick }
+      type={type}
+      className={buttonClasses}
+      onClick={onClick}
       {...props}>
-      { children }
+      {children}
     </button>
   );
 }
 
 Button.propTypes = {
-  children: React.PropTypes.node.isRequired,
+  children: React.PropTypes.node,
   className: React.PropTypes.string,
   type: React.PropTypes.oneOf(['button', 'submit', 'reset']),
   onClick: React.PropTypes.func,

@@ -9,10 +9,10 @@ function Input({
   return (
     <input
       className="block col-12 mb1 input"
-      type={ type }
-      placeholder={ placeholder }
+      type={type}
+      placeholder={placeholder}
       { ...fieldDefinition }
-      { ...props } />
+      { ...props }/>
   );
 }
 

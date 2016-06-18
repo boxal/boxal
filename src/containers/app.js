@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import Content from '../components/content';
 import Container from '../components/container';
 import Button from '../components/button';
-import { loginUser } from '../action-creators';
 
 const App = ({ children, session }) => {
   const token = session.get('token', false);
@@ -13,7 +12,7 @@ const App = ({ children, session }) => {
 
   return (
     <Container size={4} center>
-      <Content isVisible={ !isLoggedIn }>
+      <Content isVisible={!isLoggedIn}>
         <div>
           <h2 className="caps">Login to Boxal</h2>
           <a href="/api/auth/facebook">
@@ -23,7 +22,7 @@ const App = ({ children, session }) => {
           </a>
         </div>
       </Content>
-      <Content isVisible={ isLoggedIn }>
+      <Content isVisible={isLoggedIn}>
         <section>
           Hello, {firstName} {lastName}!!
           {children}
@@ -42,18 +41,10 @@ App.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
 )(App);
 
 function mapStateToProps(state) {
   return {
     session: state.session,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    login: () => dispatch(loginUser()),
-    logout: () => dispatch(logoutUser()),
   };
 }
