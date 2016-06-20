@@ -6,6 +6,8 @@ import nodeAppServer from './node-app-server';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
+import authenticate from './middleware/authenticate/facebook';
+import checkAuthorizationToken from './middleware/check-authorization-token';
 
 import * as SECRETS from './constants/secrets.js';
 
@@ -34,6 +36,9 @@ passport.use(new FacebookStrategy({
 // Facebook will redirect the user back to the application at
 //     /auth/facebook/callback
 app.get('/auth/facebook', passport.authenticate('facebook'));
+app.get('/me', checkAuthorizationToken(), authenticate(), (request, response) => {
+  response.json(request.user);
+});
 
 // Facebook will redirect the user to this URL after approval.  Finish the
 // authentication process by attempting to obtain an access token.  If
