@@ -1,5 +1,6 @@
 # Boxal
 
+[![Coverage Status](https://coveralls.io/repos/github/boxal/boxal/badge.svg?branch=master)](https://coveralls.io/github/boxal/boxal?branch=master)
 [![Build Status](https://travis-ci.org/boxal/boxal.svg?branch=master)](https://travis-ci.org/boxal/boxal)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Stories in Ready](https://badge.waffle.io/boxal/boxal.png?label=ready&title=Ready)](https://waffle.io/boxal/boxal)
