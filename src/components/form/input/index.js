@@ -11,8 +11,8 @@ function Input({
       className="block col-12 mb1 input"
       type={type}
       placeholder={placeholder}
-      { ...fieldDefinition }
-      { ...props }/>
+      {...fieldDefinition}
+      {...props}/>
   );
 }
 

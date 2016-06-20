@@ -11,7 +11,7 @@ describe('Input', () => {
     };
     const wrapper = render(
       <div id="root">
-        <Input { ...props }/>
+        <Input {...props}/>
       </div>
     );
     assert.isOk(wrapper.children().length, 'Unable to render component');
