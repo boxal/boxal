@@ -20,7 +20,6 @@ export default connect(
 )(AboutPage);
 
 function mapStateToProps() {
-  return {};
 }
 
 function mapDispatchToProps() {

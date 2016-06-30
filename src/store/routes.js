@@ -4,13 +4,15 @@ import { push } from 'react-router-redux';
 import App from '../containers/app';
 import AboutPage from '../containers/about-page';
 import * as AC from '../action-creators';
+import AlbumLinksPage from '../containers/album-links-page';
 
 export default (store) => (
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute to="/about"/>
-      <Route path="about" component={AboutPage}/>
-      <Route path="login/facebook" onEnter={() => checkAuth(store)}/>
+      <Route path="about" component={ AboutPage }/>
+      <Route path="auth/facebook" onEnter={() => checkAuth(store)}/>
+      <Route path="albums" component={ AlbumLinksPage }/>
     </Route>
   </Router>
 );
