@@ -1,24 +1,23 @@
 import fireAction from './fire-action';
-import assert from 'assert';
+import test from 'ava';
 
-describe('fireAction', () => {
-  const INITIAL_STATE = {
-    test: false,
-  };
 
-  const mockReducer = (state = INITIAL_STATE, action) => {
-    switch (action.type) {
-      case 'test':
-        state.test = true;
-        return state;
+const INITIAL_STATE = {
+  test: false,
+};
 
-      default:
-        return state;
-    }
-  };
+const mockReducer = (state = INITIAL_STATE, action) => {
+  switch (action.type) {
+    case 'test':
+      state.test = true;
+      return state;
 
-  it('it should fire the provided action against the provided reducer', () => {
-    const state = fireAction(mockReducer, INITIAL_STATE, 'test');
-    assert(state.test);
-  });
+    default:
+      return state;
+  }
+};
+
+test('it should fire the provided action against the provided reducer', (assert) => {
+  const state = fireAction(mockReducer, INITIAL_STATE, 'test');
+  assert.truthy(state.test);
 });

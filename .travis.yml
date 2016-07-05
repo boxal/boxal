@@ -3,5 +3,10 @@ language: node_js
 node_js:
   - "stable"
 
-after_success:
-  - "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+before_script:
+  - sleep 15
+  - mongo mydb_test --eval 'db.addUser("travis", "test");'
+
+services: mongodb
+
+after_success: npm run coveralls:report

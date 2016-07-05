@@ -1,118 +1,95 @@
-import proxyquire from 'proxyquire';
+import test from 'ava';
+import * as td from 'testdouble';
 import express from 'express';
 import supertest from 'supertest';
-import { expect } from 'chai';
-import * as sinon from 'sinon';
 
-const DEPENDENCIES = {
-  FacebookUtils: '../../utils/facebook',
-  winston: 'winston',
+const FACEBOOK_USERS = {
+  ['123456']: { name: 'Ramanpreet Nara' },
 };
 
-describe('middleware/authenticate/facebook', () => {
-  it('should fetch the logged in facebook user', (done) => {
-    const { server, deps: { FacebookUtils } } = createServer();
-    const token = '123456';
-    server
-      .get('/')
-      .set('Authorization', `bearer ${token}`)
-      .end(() => {
-        expect(FacebookUtils.fetchUser.calledWith(token)).to.be.true;
-        done();
-      });
-  });
+test('should fetch the facebook user', async (assert) => {
+  const { request } = createApp();
+  const token = '123456';
+  const user = FACEBOOK_USERS[token];
+  const response = await request().set('Authorization', `bearer ${token}`);
+  assert.deepEqual(response.body, user);
+});
 
-  context('if facebook user is fetched successfully', () => {
-    it('should attach the user to the request body', (done) => {
-      const user = { name: 'Ramanpreet Nara', id: '10' };
-      const FacebookUtils = createFacebookUtils({ fetchUser: user });
-      const { server } = createServer({ FacebookUtils });
-      server
-        .get('/')
-        .end((error, response) => {
-          expect(response.body).to.deep.equal(user);
-          done(error);
-        });
-    });
-  });
+test('should ignore case in the Authorization header', async (assert) => {
+  const { request } = createApp();
+  const token = '123456';
+  const user = FACEBOOK_USERS[token];
+  const response = await request().set('auThorIzaTiON', `bearer ${token}`);
+  assert.deepEqual(response.body, user);
+});
 
-  context('if Authorization header is missing', () => {
-    it('should default the access token to \'\' before fetching facebook user', (done) => {
-      const { server, deps: { FacebookUtils } } = createServer();
-      server
-        .get('/')
-        .end(() => {
-          expect(FacebookUtils.fetchUser.calledWith('')).to.be.true;
-          done();
-        });
-    });
-  });
+test('should reject with a 401, if the Authorization header is not sent', async (assert) => {
+  const { request } = createApp();
+  const response = await request();
+  assert.is(response.status, 401);
+});
 
-  context('if the faceook user cannot be fetched', () => {
-    it('should log the error using winston#error', (done) => {
-      const error = new Error('horse');
-      const FacebookUtils = createFacebookUtils({ fetchUser: error });
-      const { server, deps: { winston } } = createServer({ FacebookUtils });
-      server.get('/').end(() => {
-        expect(winston.error.calledWith(error));
-        done();
-      });
-    });
+test('should reject with a 401, if an invalid token is sent', async (assert) => {
+  const { request } = createApp();
+  const response = await request().set('Authorization', 'bearer horse');
+  assert.is(response.status, 401);
+});
 
-    it('should respond with a 401 status', (done) => {
-      const FacebookUtils = createFacebookUtils({ fetchUser: reject() });
-      const { server } = createServer({ FacebookUtils });
-      server.get('/').expect(401, done);
-    });
+test('should reject with a 401, if an invalid Authorization header is sent', async (assert) => {
+  const { request } = createApp();
+  const response = await request().set('Authorization', 'bearer horse');
+  assert.is(response.status, 401);
+});
 
-    it('should respond with an informative error message', (done) => {
-      const FacebookUtils = createFacebookUtils({ fetchUser: reject() });
-      const { server } = createServer({ FacebookUtils });
-      server
-        .get('/')
-        .end((error, response) => {
-          [/failed/i, /auth/i, /facebook/i].forEach((regex) => {
-            expect(response.body.data).to.match(regex);
-          });
-          done(error);
-        });
-    });
+test('should reject with a 401, if an invalid Authorization header is sent', async (assert) => {
+  const { request } = createApp();
+  const response = await request().set('Authorization', 'bearer horse');
+  assert.is(response.status, 401);
+});
+
+test('should reject with a informative message, if Auth fails', async (assert) => {
+  const { request } = createApp();
+  const response = await request().set('Authorization', 'bearer horse');
+  [/failed/i, /auth/i, /facebook/i].forEach((keyword) => {
+    assert.regex(response.body.data, keyword);
   });
 });
 
-function createServer({
-  FacebookUtils = createFacebookUtils(),
-  winston = createWinston(),
-} = {}) {
-  const { default: authenticate } = proxyquire('./facebook', {
-    [DEPENDENCIES.FacebookUtils]: FacebookUtils,
-    [DEPENDENCIES.winston]: winston,
+test('should log the authentication error, if Auth fails', async (assert) => {
+  const { request, dependencies: { Logger } } = createApp();
+  await request().set('Authorization', 'bearer horse');
+  assert.notThrows(() => td.verify(Logger.error(td.matchers.isA(Error))));
+});
+
+function createApp() {
+  const FacebookUtils = td.replace('../../utils/facebook');
+  const error = reject(new Error('Not found'));
+  td.when(FacebookUtils.fetchUser(td.matchers.anything())).thenReturn(error);
+  Object.keys(FACEBOOK_USERS).forEach((name) => {
+    td.when(FacebookUtils.fetchUser(name)).thenReturn(resolve(FACEBOOK_USERS[name]));
   });
+
+  const Logger = td.replace('../../utils/log');
+  const authenticate = require('./facebook').default;
   const app = express();
-  app.use(authenticate());
-  app.all('*', (_, r) => r.json(_.user));
+  app.get('/', authenticate(), (_, r) => r.send(_.user));
   return {
-    server: supertest(app),
-    deps: { FacebookUtils, winston },
+    dependencies: { FacebookUtils, Logger },
+    misc: { error },
+    request: () => supertest(app).get('/'),
   };
 }
 
-function resolve(...args) {
-  return Promise.resolve(...args);
+function reject(x) {
+  const rejected = Promise.reject(x);
+  /**
+   * @description
+   * Necessary. Otherwise bluebird will sometimes report 'Unhandled Rejection'.
+   */
+  rejected.catch(() => {});
+  return rejected;
 }
 
-function reject(...args) {
-  return Promise.reject(...args);
-}
-
-function createFacebookUtils({ fetchUser } = {}) {
-  return {
-    fetchUser: sinon.stub().returns(resolve(fetchUser)),
-  };
-}
-
-function createWinston({ error } = {}) {
-  return {
-    error: sinon.stub().returns(error),
-  };
+function resolve(x) {
+  return Promise.resolve(x);
 }

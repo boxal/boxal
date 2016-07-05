@@ -137,7 +137,6 @@
       "1tbs", {
       "allowSingleLine": true
     }],
-    "arrow-parens": ["error", "always"],
     "object-shorthand": ["error", "always"],
     "max-len": ["error", 100],
     "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],

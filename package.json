@@ -11,7 +11,8 @@
     "build": "cross-env NODE_ENV=production webpack -p",
     "clean": "rimraf dist/ coverage/",
     "commit": "git cz",
-    "cover": "nyc check-coverage --lines 80 --functions 80 --branches 80",
+    "cover": "nyc check-coverage --lines 80 --functions 80 --branches 80 --statements 80",
+    "coveralls:report": "nyc report --reporter=text-lcov | coveralls",
     "dev:server": "cross-env NODE_ENV=development PORT=3000 nodemon --use_strict server/index.js",
     "dev:client": "cross-env NODE_ENV=development webpack-dev-server -d --inline --hot --progress --no-info",
     "dev": "concurrently -r 'npm run dev:client' 'npm run dev:server'",
@@ -22,29 +23,48 @@
     "postinstall": "npm run build",
     "start": "cross-env NODE_ENV=production node --use_strict server/node-server.js",
     "pretest": "npm run clean coverage/ && npm run lint",
-    "test": "nyc --reporter=lcov --reporter=text-summary mocha",
-    "posttest": "nyc check-coverage",
-    "test:watch": "mocha --watch"
+    "test": "nyc --reporter=lcov --reporter=text-summary --all --require babel-register ava",
+    "posttest": "npm run cover",
+    "test:watch": "ava --watch"
+  },
+  "ava": {
+    "files": [
+      "src/**/*.test.js",
+      "server/**/*.test.js"
+    ],
+    "require": [
+      "babel-register",
+      "./test/entry.js"
+    ],
+    "babel": "inherit"
   },
   "nyc": {
     "exclude": [
       "**/*.test.js",
-      "test/entry.js"
-    ],
-    "lines": 80,
-    "statements": 80,
-    "branches": 80,
-    "functions": 80
+      "test/entry.js",
+      "src/index.js",
+      "server/app.js",
+      "server/index.js",
+      "server/node-proxy.js",
+      "server/proxy-config.js",
+      "server/webpack-dev-proxy.js",
+      "src/store/logger.js",
+      "src/store/configure-store.js",
+      "server/node-app-server.js"
+    ]
   },
   "devDependencies": {
     "autoprefixer": "^6.3.3",
     "autoprefixer-core": "^6.0.1",
+    "ava": "^0.15.2",
     "babel": "^6.5.2",
     "babel-cli": "^6.8.0",
     "babel-core": "^6.4.0",
     "babel-eslint": "^6.0.2",
     "babel-loader": "^6.2.1",
     "babel-plugin-__coverage__": "^0.111111.11",
+    "babel-plugin-transform-async-to-module-method": "^6.8.0",
+    "babel-plugin-transform-es2015-destructuring": "^6.9.0",
     "babel-plugin-transform-react-constant-elements": "^6.8.0",
     "babel-plugin-transform-react-inline-elements": "^6.8.0",
     "babel-polyfill": "^6.9.1",
@@ -87,6 +107,7 @@
     "history": "^2.0.1",
     "html-webpack-plugin": "^2.9.0",
     "immutable": "^3.7.5",
+    "jsdom": "^9.2.1",
     "json-loader": "^0.5.3",
     "mocha": "^2.5.0",
     "node-fetch": "^1.5.3",
@@ -99,7 +120,7 @@
     "postcss-import": "^8.1.2",
     "postcss-loader": "^0.9.1",
     "postcss-modules-local-by-default": "^1.0.1",
-    "proxyquire": "^1.7.9",
+    "proxyquire": "^1.7.10",
     "react": "^15.0.1",
     "react-addons-test-utils": "^15.0.1",
     "react-dom": "^15.0.1",
@@ -109,6 +130,7 @@
     "react-router-redux": "^4.0.0",
     "recompose": "^0.20.0",
     "redux": "^3.3.1",
+    "redux-actions": "^0.10.0",
     "redux-form": "^5.2.3",
     "redux-localstorage": "^0.4.0",
     "redux-logger": "^2.1.4",
@@ -122,6 +144,8 @@
     "stylelint": "^6.3.2",
     "stylelint-webpack-plugin": "^0.2.0",
     "supertest": "^1.2.0",
+    "supertest-as-promised": "^3.1.0",
+    "testdouble": "^1.4.3",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.14.1",
@@ -134,7 +158,9 @@
     "express": "^4.13.3",
     "helmet": "^2.0.0",
     "http-proxy": "^1.12.1",
-    "mongojs": "^2.4.0",
+    "joi": "^8.4.2",
+    "monk": "2.1.0",
+    "ramda": "^0.21.0",
     "winston": "^2.1.1"
   },
   "keywords": [],

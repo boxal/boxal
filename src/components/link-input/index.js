@@ -3,18 +3,22 @@ import React from 'react';
 
 const AlbumInput = ({ link, setLink, onLinkSubmit }) => {
   return (
-    <div>
-      <form onSubmit={(event) => {
-        event.preventDefault();
-        onLinkSubmit(link);
-      }}>
-        <input
-          type="text"
-          placeholder="Album link"
-          onChange={(event) => setLink(event.target.value)}/>
-        <input type="submit" value="Save Link" />
-      </form>
-  </div>
+    <form>
+      <input
+        className="qa-album-link-input"
+        type="text"
+        placeholder="Album link"
+        value={link}
+        onChange={(event) => setLink(event.target.value)}/>
+      <button
+        type="button"
+        onClick={() => {
+          onLinkSubmit(link);
+          setLink('');
+        }}>
+        Save Link
+      </button>
+    </form>
   );
 };
 
