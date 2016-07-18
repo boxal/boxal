@@ -21,7 +21,11 @@ const exposedProperties = ['window', 'navigator', 'document'];
 
 global.document = jsdom('<!doctype html><html><body></body></html>');
 global.window = document.defaultView;
-Object.keys(document.defaultView).forEach((property) => {
+
+window.localStorage = createLocalStorage();
+window.fetch = () => {};
+
+Object.keys(window).forEach((property) => {
   if (typeof global[property] === 'undefined') {
     exposedProperties.push(property);
     global[property] = document.defaultView[property];
@@ -31,3 +35,15 @@ Object.keys(document.defaultView).forEach((property) => {
 global.navigator = {
   userAgent: 'node.js',
 };
+
+function createLocalStorage() {
+  const cache = {};
+  return {
+    setItem(name, item) {
+      cache[name] = String(item);
+    },
+    getItem(name) {
+      return cache.hasOwnProperty(name) ? cache[name] : null;
+    },
+  };
+}

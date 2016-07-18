@@ -35,7 +35,6 @@ test.serial('should send an empty list, if the user has no albums', async (asser
   const { response } = await request({
     token: TOKEN[0],
     method: 'get',
-    url: '/users/me/albums',
   });
 
   assert.deepEqual(response.body, {
@@ -47,7 +46,6 @@ test.serial('should send a list with one album, if user has one album', async (a
   const { response } = await request({
     token: TOKEN[2],
     method: 'get',
-    url: '/users/me/albums',
   });
 
   assert.deepEqual(response.body, {
@@ -59,7 +57,6 @@ test.serial('should send a list with two albums, if user has two albums', async 
   const { response } = await request({
     token: TOKEN[0],
     method: 'get',
-    url: '/users/me/albums',
   });
 
   assert.deepEqual(response.body, {
@@ -71,7 +68,6 @@ test.serial('should save a new dropboxLink to the database', async (assert) => {
   const body = { dropboxLink: 'test' };
   const { deps: { db } } = await request({
     method: 'post',
-    url: '/users/me/albums',
     token: TOKEN[1],
     body,
   });
@@ -85,7 +81,6 @@ test.serial('should not create redundant dropbox links in the database', async (
   const albumLink = { dropboxLink: 'three', extra: 1 };
   const { deps: { db } } = await request({
     method: 'post',
-    url: '/users/me/albums',
     body: albumLink,
     token,
   });
@@ -98,7 +93,6 @@ test.serial('should return the newly saved dropboxLink in POST body', async (ass
   const body = { dropboxLink: 'test' };
   const { response } = await request({
     method: 'post',
-    url: '/users/me/albums',
     token: TOKEN[1],
     body,
   });
@@ -111,7 +105,6 @@ test.serial('should attach the facebookUserId to the dropboxLink document', asyn
   const token = TOKEN[1];
   const { response } = await request({
     method: 'post',
-    url: '/users/me/albums',
     token,
     body,
   });
@@ -125,7 +118,6 @@ test.serial('should not save invalid dropboxLink documents into the database', a
   const facebookUserId = FACEBOOK_USERS[token].id;
   const { deps: { db } } = await request({
     method: 'post',
-    url: '/users/me/albums',
     token,
     body,
   });
@@ -139,7 +131,6 @@ test.serial('should return a 400 error, if request payload is invalid', async (a
   const body = { dropboxLin: 'test' };
   const { response } = await request({
     method: 'post',
-    url: '/users/me/albums',
     token,
     body,
   });
@@ -147,10 +138,10 @@ test.serial('should return a 400 error, if request payload is invalid', async (a
   assert.is(response.status, 400);
 });
 
-async function request({ url, token, body, method } = {}) {
+async function request({ token, body, method } = {}) {
   const app = await setupTests();
   const response = await app.request()
-    [method](url)
+    [method]('/api/users/me/albums')
     .send(body)
     .set('Authorization', `bearer ${token}`)
     .set('Content-Type', 'application/json');

@@ -9,7 +9,9 @@ const AlbumLinksPage = ({ albumLinks, dispatch }) => {
   return (
     <Container size={4} center>
       <h2 className="caps">Page to enter and display album links</h2>
-      <LinkInput onLinkSubmit={(link) => dispatch(AlbumActionCreators.addAlbumLink(link))}/>
+      <LinkInput onLinkSubmit={(dropboxLink) => {
+        dispatch(AlbumActionCreators.saveAlbumToDB({ dropboxLink }));
+      }}/>
       <div className="qa-album-links">
         {
           albumLinks.map((albumLink, i) => {

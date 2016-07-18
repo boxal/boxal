@@ -1,72 +1,44 @@
 import test from 'ava';
-import { checkStatus, parseJSON } from './fetch';
+import * as td from 'testdouble';
+import proxyquire from 'proxyquire';
 
-test('"checkStatus" should return the response, if it has a 2xx status', (assert) => {
-  const response = {
-    status: 200,
-  };
-  assert.is(checkStatus(response), response);
+test('should yield to nodeFetch', () => {
+  const { fetch, deps: { nodeFetch } } = requireFetch();
+  const args = [1, 2];
+  fetch(...args);
+  td.verify(nodeFetch(...args));
 });
 
-test('"checkStatus" should throw an error if the response has a 1xx status', (assert) => {
-  const response = {
-    status: 199,
-  };
-  assert.throws(() => checkStatus(response));
+test('should reject responses with non 200 status', async () => {
+  const { fetch, deps: { checkStatus } } = requireFetch();
+  const args = [1, 2];
+  await fetch(...args);
+  td.verify(checkStatus(td.matchers.anything()));
 });
 
-test('"checkStatus" should throw an error if the response has a 3xx status', (assert) => {
-  const response = {
-    status: 300,
-  };
-  assert.throws(() => checkStatus(response));
+test('should parse the responses as JSON objects', async () => {
+  const { fetch, deps: { parseJSON } } = requireFetch();
+  const args = [1, 2];
+  await fetch(...args);
+  td.verify(parseJSON(td.matchers.anything()));
 });
 
-test('"checkStatus" should throw an error if the response has a 4xx status', (assert) => {
-  const response = {
-    status: 400,
+function requireFetch() {
+  const nodeFetch = td.function();
+  const checkStatus = td.function();
+  const parseJSON = td.function();
+  td.when(nodeFetch(td.matchers.anything(), td.matchers.anything())).thenReturn(Promise.resolve());
+  const { default: fetch } = proxyquire('./fetch', {
+    'node-fetch': nodeFetch,
+    '../../src/utils/api/check-status': { default: checkStatus },
+    '../../src/utils/api/parse-json': { default: parseJSON },
+  });
+  return {
+    fetch,
+    deps: {
+      nodeFetch,
+      checkStatus,
+      parseJSON,
+    },
   };
-  assert.throws(() => checkStatus(response));
-});
-
-test('"checkStatus" should throw an error if the response has a 5xx status', (assert) => {
-  const response = {
-    status: 500,
-  };
-  assert.throws(() => checkStatus(response));
-});
-
-test('"checkStatus" should forward the response "statusText" in thrown error', (assert) => {
-  const statusText = 'oh no!';
-  const response = {
-    status: 500,
-    statusText,
-  };
-
-  try {
-    checkStatus(response);
-  } catch (ex) {
-    assert.is(statusText, ex.message);
-  }
-});
-
-test('"checkStatus" should forward the response in thrown error', (assert) => {
-  const response = {
-    status: 500,
-  };
-
-  try {
-    checkStatus(response);
-  } catch (ex) {
-    assert.is(response, ex.response);
-  }
-});
-
-test('"parseJSON" should parse the response to a JSON object', (assert) => {
-  const json = Promise.resolve({});
-  const response = {
-    json: () => json,
-  };
-
-  assert.is(parseJSON(response), json);
-});
+}

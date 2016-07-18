@@ -1,5 +1,9 @@
 import createActions from '../utils/create-actions';
 
+export const ACTIONS = createActions('Root', [
+  'INITIALIZE',
+]);
+
 export const AUTH_ACTIONS = createActions('App', [
   'LOGIN_USER_PENDING',
   'LOGIN_USER_SUCCESS',
@@ -9,5 +13,8 @@ export const AUTH_ACTIONS = createActions('App', [
 ]);
 
 export const ALBUM_ACTIONS = createActions('AlbumActions', [
-  'ADD_ALBUM_LINK',
+  'SAVE_ALBUM_TO_DB',
+  'SAVE_ALBUM_TO_STORE',
+  'FETCH_ALBUMS_FROM_DB',
+  'SAVE_ALBUMS_TO_STORE',
 ]);

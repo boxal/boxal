@@ -3,9 +3,8 @@ import helmet from 'helmet';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
-import authenticate from './middleware/authenticate/facebook';
-import checkAuthorizationToken from './middleware/check-authorization-token';
 import handleAPIErrors from './middleware/handle-api-errors';
+import enableHTML5Routing from './enable-html5-routing';
 
 import * as SECRETS from './constants/secrets.js';
 import resources from './resources';
@@ -33,16 +32,13 @@ passport.use(new FacebookStrategy({
 // Redirect the user to Facebook for authentication.  When complete,
 // Facebook will redirect the user back to the application at
 //     /auth/facebook/callback
-app.get('/auth/facebook', passport.authenticate('facebook'));
-app.get('/me', checkAuthorizationToken(), authenticate(), (request, response) => {
-  response.json(request.user);
-});
+app.get('/api/auth/facebook', passport.authenticate('facebook'));
 
 // Facebook will redirect the user to this URL after approval.  Finish the
 // authentication process by attempting to obtain an access token.  If
 // access was granted, the user will be logged in.  Otherwise,
 // authentication has failed.
-app.get('/auth/facebook/callback',
+app.get('/api/auth/facebook/callback',
   passport.authenticate('facebook', {
     failureRedirect: '/login',
     session: false,
@@ -55,8 +51,9 @@ app.get('/auth/facebook/callback',
   }
 );
 
-app.use('/', resources);
-
+app.use('/api', resources);
 app.use(handleAPIErrors());
+
+enableHTML5Routing(app);
 
 export default app;

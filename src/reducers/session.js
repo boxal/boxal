@@ -1,5 +1,6 @@
 import * as C from '../constants';
 import * as I from 'immutable';
+import * as ReduxActions from 'redux-actions';
 
 const INITIAL_STATE = I.fromJS({
   token: null,
@@ -8,36 +9,35 @@ const INITIAL_STATE = I.fromJS({
   isLoading: false,
 });
 
-function sessionReducer(state = INITIAL_STATE, action) {
-  switch (action.type) {
-    case C.AUTH_ACTIONS.LOGIN_USER_PENDING:
-      return state.merge(I.fromJS({
-        token: null,
-        user: {},
-        hasError: false,
-        isLoading: true,
-      }));
+export default ReduxActions.handleActions({
 
-    case C.AUTH_ACTIONS.LOGIN_USER_SUCCESS:
-      return state.merge(I.fromJS({
-        token: action.payload.token,
-        user: action.payload.user,
-        hasError: false,
-        isLoading: false,
-      }));
+  [C.AUTH_ACTIONS.LOGIN_USER_PENDING]: (state) => {
+    return state.merge(I.fromJS({
+      token: null,
+      user: {},
+      hasError: false,
+      isLoading: true,
+    }));
+  },
 
-    case C.AUTH_ACTIONS.LOGIN_USER_ERROR:
-      return state.merge(I.fromJS({
-        hasError: true,
-        isLoading: false,
-      }));
+  [C.AUTH_ACTIONS.LOGIN_USER_SUCCESS]: (state, action) => {
+    return state.merge(I.fromJS({
+      token: action.payload.token,
+      user: action.payload.user,
+      hasError: false,
+      isLoading: false,
+    }));
+  },
 
-    case C.AUTH_ACTIONS.LOGOUT_USER:
-      return state.merge(INITIAL_STATE);
+  [C.AUTH_ACTIONS.LOGIN_USER_ERROR]: (state) => {
+    return state.merge(I.fromJS({
+      hasError: true,
+      isLoading: false,
+    }));
+  },
 
-    default:
-      return state;
-  }
-}
+  [C.AUTH_ACTIONS.LOGOUT_USER]: (state) => {
+    return state.merge(INITIAL_STATE);
+  },
 
-export default sessionReducer;
+}, INITIAL_STATE);

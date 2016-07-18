@@ -9,6 +9,7 @@ import { syncHistoryWithStore } from 'react-router-redux';
 
 import getRoutes from './store/routes';
 import configureStore from './store/configure-store';
+import * as ActionCreators from './action-creators';
 import rootSaga from './sagas';
 
  // Global styles
@@ -28,3 +29,5 @@ ReactDOM.render(
   </div>,
   document.getElementById('root')
 );
+
+store.dispatch(ActionCreators.initialize());

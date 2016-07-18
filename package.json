@@ -23,7 +23,7 @@
     "postinstall": "npm run build",
     "start": "cross-env NODE_ENV=production node --use_strict server/node-server.js",
     "pretest": "npm run clean coverage/ && npm run lint",
-    "test": "nyc --reporter=lcov --reporter=text-summary --all --require babel-register ava",
+    "test": "nyc ava",
     "posttest": "npm run cover",
     "test:watch": "ava --watch"
   },
@@ -39,18 +39,24 @@
     "babel": "inherit"
   },
   "nyc": {
+    "require": [
+      "babel-register"
+    ],
+    "all": true,
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
     "exclude": [
       "**/*.test.js",
       "test/entry.js",
       "src/index.js",
       "server/app.js",
       "server/index.js",
-      "server/node-proxy.js",
-      "server/proxy-config.js",
-      "server/webpack-dev-proxy.js",
+      "server/enable-html5-routing.js",
       "src/store/logger.js",
       "src/store/configure-store.js",
-      "server/node-app-server.js"
+      "webpack.config.js"
     ]
   },
   "devDependencies": {
@@ -97,6 +103,7 @@
     "css-loader": "^0.23.0",
     "cssnano": "^3.5.2",
     "cz-conventional-changelog": "^1.1.6",
+    "deepmerge": "^0.2.10",
     "denodeify": "^1.2.1",
     "enzyme": "^2.2.0",
     "eslint": "2.10.2",
@@ -157,7 +164,6 @@
     "bluebird": "^3.4.1",
     "express": "^4.13.3",
     "helmet": "^2.0.0",
-    "http-proxy": "^1.12.1",
     "joi": "^8.4.2",
     "monk": "2.1.0",
     "ramda": "^0.21.0",
