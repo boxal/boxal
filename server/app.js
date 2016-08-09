@@ -5,14 +5,9 @@ import passport from 'passport';
 import { Strategy as FacebookStrategy } from 'passport-facebook';
 import handleAPIErrors from './middleware/handle-api-errors';
 import enableHTML5Routing from './enable-html5-routing';
-import http from 'http';
-import io from'socket.io';
 import * as SECRETS from './constants/secrets.js';
 import resources from './resources';
-import doStuff from './scraper'
 
-const app = express();
-const httpIO = io(9000);
 
 // Enable various security helpers.
 app.use(helmet());
@@ -53,20 +48,6 @@ app.get('/api/auth/facebook/callback',
    );
   }
 );
-
-app.get('/api/webscrape/:albumSharedLink', (request, response)  =>{
-  let url = request.params.albumSharedLink;
-  httpIO.on('connection', (socket) => {
-    socket.on('album-link', (url) => {
-      doStuff(url).subscribe((data) => {
-        socket.emit({
-          srcset: data,
-        });
-      });
-    })
-  });
-
-});
 
 app.use('/api', resources);
 app.use(handleAPIErrors());
