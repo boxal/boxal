@@ -1,8 +1,6 @@
 require('babel-register')({});
-import express from 'express';
-const app = express();
 const httpIO = require('socket.io')(9000);
-import doStuff from './scraper'
+const doStuff = require('./scraper');
 
 const winston = require('winston');
 const app = require('./app').default;

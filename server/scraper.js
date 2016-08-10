@@ -7,7 +7,7 @@ const scrape = require('./scraper_utils/scrape');
 const scrapeImageFileLinks = scrape(getImageFileLinks);
 const scrapePreviewImageSrcset = scrape(getPreviewImageSrcset);
 
-module.exports = function doStuff(albumPage) {
+function doStuff(albumPage) {
   return scrapeImageFileLinks(albumPage)
     .flatMap(x => x)
     .flatMap(scrapePreviewImageSrcset);
@@ -22,7 +22,7 @@ function getPreviewImageSrcset() {
   const image = document.getElementsByClassName('preview-image')[0];
   return image.getAttribute('srcset');
 }
-
+export default doStuff;
 // io.on('connection', (socket) => {
 //   socket.on('album-link', (url) => {
 //     doStuff(url).subscribe((data) => {

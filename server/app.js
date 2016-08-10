@@ -7,7 +7,9 @@ import handleAPIErrors from './middleware/handle-api-errors';
 import enableHTML5Routing from './enable-html5-routing';
 import * as SECRETS from './constants/secrets.js';
 import resources from './resources';
+import doStuff from './scraper'
 
+const app = express();
 
 // Enable various security helpers.
 app.use(helmet());
