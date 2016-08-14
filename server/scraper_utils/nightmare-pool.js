@@ -11,7 +11,7 @@ exports.create = function create(key) {
   NightmarePools.get(key).add(nightmare);
 
   return nightmare;
-}
+};
 
 exports.empty = function empty(key) {
   assert(NightmarePools.has(key), 'Nightmare pool exists');
@@ -21,4 +21,4 @@ exports.empty = function empty(key) {
       if (data) console.log(data);
     });
   }
-}
+};

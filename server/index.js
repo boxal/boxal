@@ -1,14 +1,17 @@
 require('babel-register')({});
-const httpIO = require('socket.io')(9000);
 const doStuff = require('./scraper');
 
 const winston = require('winston');
+const http = require('http');
 const app = require('./app').default;
+const server = http.createServer(app);
+const httpIO = require('socket.io')(server);
+const C = require('../src/constants');
 
 const PORT = process.env.PORT;
 
 // Start up the server.
-app.listen(PORT, (err) => {
+server.listen(PORT, (err) => {
   if (err) {
     winston.error(err);
     return;
@@ -18,11 +21,12 @@ app.listen(PORT, (err) => {
 });
 
 httpIO.on('connection', (socket) => {
-  socket.on('album-link', (url) => {
+  socket.on(C.SOCKET_ACTIONS.SCRAPE_ALBUM_IMAGES, ({ url }) => {
     doStuff(url).subscribe((data) => {
-      socket.emit({
+      console.log(data);
+      socket.emit(C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET, {
         srcset: data,
       });
     });
-  })
+  });
 });

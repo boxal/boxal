@@ -6,6 +6,9 @@ import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
 import logger from './logger';
 import rootReducer from '../reducers';
+import createSocketIoMiddleware from 'redux-socket.io';
+import io from 'socket.io-client';
+import * as C from '../constants';
 
 function configureStore(initialState) {
   const sagaMiddleware = createSagaMiddleware();
@@ -19,8 +22,12 @@ function configureStore(initialState) {
 }
 
 function _getMiddleware() {
+  const socket = io(C.SOCKET_IO_URL);
+  const socketMiddleware = createSocketIoMiddleware(socket, C.SOCKET_IO_PREFIX);
+
   const middleware = [
     routerMiddleware(browserHistory),
+    socketMiddleware,
   ];
 
   if (__DEV__) {
@@ -29,6 +36,7 @@ function _getMiddleware() {
 
   return middleware;
 }
+
 
 function _getEnhancers() {
   const enhancers = [

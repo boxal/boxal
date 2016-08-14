@@ -22,7 +22,8 @@ function getPreviewImageSrcset() {
   const image = document.getElementsByClassName('preview-image')[0];
   return image.getAttribute('srcset');
 }
-export default doStuff;
+
+module.exports = doStuff;
 // io.on('connection', (socket) => {
 //   socket.on('album-link', (url) => {
 //     doStuff(url).subscribe((data) => {

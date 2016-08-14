@@ -4,6 +4,12 @@ import * as Selectors from '../selectors';
 import LinkInput from '../components/link-input';
 import Container from '../components/ui/container';
 import * as AlbumActionCreators from '../action-creators/album';
+import * as SocketActionCreators from '../action-creators/socket';
+
+import * as C from '../constants';
+import SocketIO from 'socket.io-client';
+
+const socket = SocketIO.connect('http://localhost:3000/');
 
 const AlbumLinksPage = ({ albumLinks, dispatch }) => {
   return (
@@ -11,6 +17,10 @@ const AlbumLinksPage = ({ albumLinks, dispatch }) => {
       <h2 className="caps">Page to enter and display album links</h2>
       <LinkInput onLinkSubmit={(dropboxLink) => {
         dispatch(AlbumActionCreators.saveAlbumToDB({ dropboxLink }));
+        dispatch(SocketActionCreators.scrapeAlbumImages({ dropboxLink }));
+        socket.emit(C.SOCKET_ACTIONS.SCRAPE_ALBUM_IMAGES, {
+          url: dropboxLink,
+        });
       }}/>
       <div className="qa-album-links">
         {
@@ -22,6 +32,13 @@ const AlbumLinksPage = ({ albumLinks, dispatch }) => {
     </Container>
   );
 };
+
+
+socket.on(C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET, ({ srcset }) => {
+  const image = document.createElement('img');
+  image.srcset = srcset;
+  document.body.appendChild(image);
+});
 
 AlbumLinksPage.propTypes = {
   albumLinks: React.PropTypes.object,

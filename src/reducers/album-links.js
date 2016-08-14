@@ -20,4 +20,9 @@ export default ReduxActions.handleActions({
     return state.update('albumLinks', (albumLinks) => albumLinks.concat(dropboxLinks));
   },
 
+  [C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET]: (state, { payload }) => {
+    console.log( payload );
+    return state;
+  },
+
 }, INITIAL_STATE);
