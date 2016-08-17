@@ -23,7 +23,6 @@ server.listen(PORT, (err) => {
 httpIO.on('connection', (socket) => {
   socket.on(C.SOCKET_ACTIONS.SCRAPE_ALBUM_IMAGES, ({ url }) => {
     doStuff(url).subscribe((data) => {
-      console.log(data);
       socket.emit(C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET, {
         srcset: data,
       });
