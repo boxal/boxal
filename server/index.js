@@ -21,11 +21,17 @@ server.listen(PORT, (err) => {
 });
 
 httpIO.on('connection', (socket) => {
-  socket.on(C.SOCKET_ACTIONS.SCRAPE_ALBUM_IMAGES, ({ url }) => {
-    doStuff(url).subscribe((data) => {
-      socket.emit(C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET, {
-        srcset: data,
+  socket.on('action', (action) => {
+    if (action.type === C.SOCKET_ACTIONS.SCRAPE_ALBUM_IMAGES) {
+      doStuff(action.payload.url.dropboxLink).subscribe((data) => {
+        socket.emit('action', {
+          type: C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET,
+          payload: {
+            srcset: data,
+            dropboxLink: action.payload.url.dropboxLink,
+          },
+        });
       });
-    });
+    }
   });
 });

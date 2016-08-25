@@ -23,7 +23,6 @@ export default ReduxActions.handleActions({
 
   [C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET]: (state, { payload } ) => {
     const { srcset, dropboxLink } = payload;
-    // srcset.split(',');
     return state.updateIn(['imageSrcset', dropboxLink], (srcsets = I.List()) => {
       return srcsets.push(srcset);
     });

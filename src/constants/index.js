@@ -19,11 +19,11 @@ export const ALBUM_ACTIONS = createActions('AlbumActions', [
   'SAVE_ALBUMS_TO_STORE',
 ]);
 
-export const SOCKET_IO_PREFIX = 'socket-io';
+export const REDUX_SOCKET_IO_PREFIX = '@@socket-io';
 
-export const SOCKET_ACTIONS = createActions(SOCKET_IO_PREFIX, [
-  'SCRAPE_ALBUM_IMAGES',
-  'ALBUM_IMAGE_SRCSET',
-]);
+export const SOCKET_ACTIONS = {
+  SCRAPE_ALBUM_IMAGES: `${REDUX_SOCKET_IO_PREFIX}/SCRAPE_ALBUM_IMAGES`,
+  ALBUM_IMAGE_SRCSET: 'ALBUM_IMAGE_SRCSET',
+};
 
 export const SOCKET_IO_URL = 'http://localhost:3000/';

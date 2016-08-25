@@ -7,11 +7,6 @@ import * as AlbumActionCreators from '../action-creators/album';
 import * as SocketActionCreators from '../action-creators/socket';
 import * as I from 'immutable';
 
-import * as C from '../constants';
-import SocketIO from 'socket.io-client';
-
-const socket = SocketIO.connect('http://localhost:3000/');
-
 const AlbumLinksPage = ({ albumLinks, imageSrcset, dispatch }) => {
   return (
     <Container size={4} center>
@@ -19,16 +14,6 @@ const AlbumLinksPage = ({ albumLinks, imageSrcset, dispatch }) => {
       <LinkInput onLinkSubmit={(dropboxLink) => {
         dispatch(AlbumActionCreators.saveAlbumToDB({ dropboxLink }));
         dispatch(SocketActionCreators.scrapeAlbumImages({ dropboxLink }));
-        socket.emit(C.SOCKET_ACTIONS.SCRAPE_ALBUM_IMAGES, {
-          url: dropboxLink,
-        });
-
-        socket.on(C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET, ({ srcset }) => {
-          // const image = document.createElement('img');
-          // image.srcset = srcset;
-          // document.body.appendChild(image);
-          dispatch(SocketActionCreators.setAlbumImageSrcset({ srcset }, { dropboxLink }));
-        });
       }}/>
       <div className="qa-album-links">
         {

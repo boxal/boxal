@@ -23,7 +23,7 @@ function configureStore(initialState) {
 
 function _getMiddleware() {
   const socket = io(C.SOCKET_IO_URL);
-  const socketMiddleware = createSocketIoMiddleware(socket, C.SOCKET_IO_PREFIX);
+  const socketMiddleware = createSocketIoMiddleware(socket, C.REDUX_SOCKET_IO_PREFIX);
 
   const middleware = [
     routerMiddleware(browserHistory),
