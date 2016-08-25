@@ -5,6 +5,7 @@ import * as ReduxActions from 'redux-actions';
 
 const INITIAL_STATE = I.Map({
   albumLinks: I.OrderedSet(),
+  imageSrcset: I.Map(),
 });
 
 export default ReduxActions.handleActions({
@@ -20,8 +21,12 @@ export default ReduxActions.handleActions({
     return state.update('albumLinks', (albumLinks) => albumLinks.concat(dropboxLinks));
   },
 
-  [C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET]: (state) => {
-    return state;
+  [C.SOCKET_ACTIONS.ALBUM_IMAGE_SRCSET]: (state, { payload } ) => {
+    const { srcset, dropboxLink } = payload;
+    // srcset.split(',');
+    return state.updateIn(['imageSrcset', dropboxLink], (srcsets = I.List()) => {
+      return srcsets.push(srcset);
+    });
   },
 
 }, INITIAL_STATE);
